@@ -1,0 +1,25 @@
+name: Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  server:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Collect
+        run: |
+          sudo apt-get update
+          sudo apt-get install zstd wget openjdk-8-jdk
+          wget https://nya.globalslb.net/natfrp/client/launcher-unix/3.0.0/natfrp-service_linux_amd64.tar.zst
+          unzstd natfrp-service_linux_amd64.tar.zst
+          tar xvf natfrp-service_linux_amd64.tar
+          chmod 0755 *
+      
+      - name: Run
+        run: |
+          python3 daima.py "${{ secrets.APIKEY }}:${{ secrets.FRPID }}"
+  
